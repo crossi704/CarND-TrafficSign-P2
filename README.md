@@ -13,16 +13,25 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 
-[//]: # (Image References)
+[//]: # (Example References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[TrainSampleData]: ./examples/training_samples_per_class.png "Training Samples per Class"
+[ValidSampleData]: ./examples/validation_samples_per_class.png "Validation Samples per Class"
+[TestingSampleData]: ./examples/testing_samples_per_class.png "Testing Samples per Class"
+[OriginalYield]: ./examples/original_yield.png "Traffic Sign - Yield"
+[YieldGray]: ./examples/grayscale_yield.png "Traffic Sign - Yield - Grayscale"
+[YieldGrayEq]: ./examples/grayscale_eq_yield.png "Traffic Sign - Yield - Grayscale + Histogram Equalization"
+[YieldGrayEqNorm]: ./examples/grayscale_eq_norm_yield.png "Traffic Sign - Yield - Grayscale + Histogram Equalization + Normalization"
+[PredictionsFinal]: ./examples/new_images_final_results.png "New images predictions"
+[NNArchitecture]: ./examples/nn-architecture.png "My Neural Network Architecture"
+
+[//]: # (New Image References)
+[Pedestrians]: ./new_images/pedestrians.jpg "Pedestrians"
+[Roadwork]: ./new_images/road_work.jpg "Road Work"
+[Stop]: ./new_images/stop.jpg "Stop"
+[TurnRightAhead]: ./new_images/turn_right_ahead.jpg "Turn Right Ahead"
+[Yield]: ./new_images/yield.jpg "Yield"
+
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -32,13 +41,13 @@ The goals / steps of this project are the following:
 
 ####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
 
-You're reading it! and here is a link to my [project code](https://gitlab.com/zmechz/CarND-TrafficSign-P2/blob/master/Traffic_Sign_Classifier.ipynb)
+You're reading it! and here is a link to my [project code](https://github.com/zmechz/CarND-TrafficSign-P2/blob/master/Traffic_Sign_Classifier.ipynb)
 
 ###Data Set Summary & Exploration
 
 ####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
-I used the pandas library to calculate summary statistics of the traffic
+I used the Numpy library to calculate summary statistics of the traffic
 signs data set:
 
 * The size of training set is 34799
@@ -47,45 +56,52 @@ signs data set:
 * The shape of a traffic sign image is 32x32x3 (WxHxChannels)
 * The number of unique classes/labels in the data set is 43
 
+
 ####2. Include an exploratory visualization of the dataset.
 
 Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
 
-![alt text][image1]
+<br>
+![TrainSampleData]
+<br>
+![ValidSampleData]
+<br>
+![TestingSampleData]
+<br>
 
 ###Design and Test a Model Architecture
 
 ####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-Original image:
-![Yield][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/examples/original_yield.png]
+Original image:<br>
+![OriginalYield]
 
-As a first step, I decided to convert the images to grayscale because using only one colour channel as input for the neural network would reduce the number of parameters to be processed by each layer. This could make training and validation achieve better precision.
-1) ![GrayscaleYield][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/examples/grayscale_yield.png]
+1) I decided to convert the images to grayscale because using only one colour channel as input for the neural network would reduce the number of parameters to be processed by each layer. This could make training and validation achieve better precision. <br>
+![YieldGray]
 
-As a second step, I decided to perform histogram equalization to adjust contrast. Images that were too dark, become lighter and easier to see after that.
-2) ![GrEqYield][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/examples/grayscale_eq_yield.png]
+2) I decided to perform histogram equalization to adjust contrast. Images that were too dark, become lighter and easier to see after that.<br>
+![YieldGrayEq]
 
-As a third step, I decided to perform image normalization to fix glare issues.
-3) ![GrEqYield][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/examples/grayscale_eq_norm_yield.png]
+3) As a third step, I decided to perform image normalization to fix glare issues.<br>
+![YieldGrayEqNorm]
 
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
 My final model consisted of the following layers:
 
+
+| Layer | Description |
 |:-------------------:|:---------------------------------------------:|
-| Layer         	  |     Description	                         	  |
-|:-------------------:|:---------------------------------------------:|
-| Input               | 32x32x3 RGB image   						  |
-| Convolution 3x3     | 1x1 stride, VALID padding, outputs 28x28x12   |
-| RELU				  |										          |
+| Input | 32x32x3 RGB image |
+| Convolution 3x3 | 1x1 stride, VALID padding, outputs 28x28x12 |
+| RELU | |
 | Max pooling	      | 2x2 stride,  outputs 14x14x12 	              |
 | Convolution 3x3	  | 1x1 stride, VALID padding, outputs 10x10x32   |
 | RELU				  |									        	  |
 | Max pooling	      | 2x2 stride,  outputs 5x5x32   	              |
 | Convolution 3x3	  | 1x1 stride, VALID padding, outputs 3x3x64     |
-| RELU				  |										          |
+| RELU				  |	|
 | Flatten             | Input = 576, Output = 800                     |
 | Dropout             | Keep probability = 75%                        |
 | Fully connected	  | Input = 800, Output = 256 				      |
@@ -94,20 +110,23 @@ My final model consisted of the following layers:
 | Fully connected	  | Input = 256, Output = 84  				      |
 | RELU				  |										          |
 | Fully connected	  | Input = 84, Output = 43   				      |
-| Softmax			  |  etc.        						          |
-|:-------------------:|:---------------------------------------------:|
+| Softmax			  |    						          |
 
-![NNArchitecture][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/examples/nn-architecture.png]
+
+![NNArchitecture]
 
 
 ####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
 To train the model, I used the following parameters:
-EPOCHS = 80
-BATCH_SIZE = 128
-LEARNING_RATE = 0.0005
-MU = 0
-SIGMA = 0.1
+
+Name | Value
+------------ | -------------
+**EPOCHS** | 80 |
+**BATCH_SIZE** | 128
+**LEARNING_RATE** | 0.0005
+**MU** | 0
+**SIGMA** | 0.1
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
@@ -137,11 +156,11 @@ Therefore, I decided to increase the number of filters, add one more convolution
 
 Here are five German traffic signs that I found on the web:
 
-![Pedestrians](https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/new_images/pedestrian.jpg)
-![Roadwork][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/new_images/road_work.jpg] 
-![Stop][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/new_images/stop.jpg]
-![TurnRightAhead][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/turn_right_ahead.jpg] 
-![Yield][https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/new_images/yield.jpg]
+![Pedestrians]
+![Roadwork]
+![Stop]
+![TurnRightAhead]
+![Yield]
 
 The original images I found on the web were too large (more than 300 x 300 pixels) and when I applied resize to 32x32 (to satisfy NN input), these images lost too many pixels and became poor quality thumbnails. This made it even harder for them to be recognized ny the NN. If I would have used smaller pictures, the accuracy could have been even better.
 First image (Pedestrian) has a "watermark" on its center. This make prediction goes totally wrong about it.
@@ -164,7 +183,7 @@ The model was able to correctly guess 4 of the 5 traffic signs, which gives an a
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 The predicition result:
-![PredictionsFinal](https://gitlab.com/zmechz/CarND-TrafficSign-P2/tree/master/examples/new_images_final_results.png)
+![PredictionsFinal]
 
 For the first image, the model is totally random due to the "watermark" (spin logo) on its center.
-It hasn't even mentioned "Pedestrian" as a prediction case.
+The prediction hasn't even mentioned "Pedestrian" as a possible case.
